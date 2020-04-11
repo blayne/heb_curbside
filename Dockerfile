@@ -1,4 +1,4 @@
-FROM python:rc-alpine3.10
+FROM python:3.7.7-buster
 
 WORKDIR /app
 
