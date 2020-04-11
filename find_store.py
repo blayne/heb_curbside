@@ -77,10 +77,47 @@ def find_stores():
 
     return stores_available
 
+def get_markup(store_id):
+    url = 'https://www.heb.com/commerce-api/v1/cart/fulfillment/pickup'
+    payload = '{"ignoreCartChangeWarnings":false,"pickupStoreId":"'+ str(store_id) +'"}'
+    content_length = len(payload) + 5
+    headers = {
+        "Host": "www.heb.com",
+        "Content-Length": str(content_length),
+        "Content-Type": "application/json;charset=UTF-8"
+    }
+
+    response = requests.post(url, data=payload, headers=headers)
+    json_blob = json.loads(response.content)
+    markup = json_blob['markup'][:1]
+
+    return markup
+
+def get_detail_slots(store_id):
+    slots = ""
+    url = 'https://www.heb.com/commerce-api/v1/timeslot/timeslots?store_id={}&days=15&fulfillment_type=pickup'.format(store_id)
+    headers = {
+        "Host": "www.heb.com"
+    }
+    response = requests.get(url, headers=headers)
+
+    json_blob = json.loads(response.content)
+    slots_blob = None
+
+    if 'items' in json_blob:
+        slots_blob = json_blob['items']
+        slots = slots + "Available Curbside slots:\n"
+        for slot_number,slot in enumerate(slots_blob):
+            slot_time = parse(slot['timeslot']['startTime'])
+            slots = slots + "{} for ${:,.2f}\n".format(slot_time.strftime("%B %d @ %I:%M %p"), slot['timeslot']['totalPrice'])
+
+    return slots
+
 def get_all_slots(stores_available):
     slots = ""
     slots = slots + "Stores with available Curbside (as of {}):\n".format(get_now())
     for store in stores_available:
+        store_id = store['store']['id']
         slots = slots + "\n"
         slots = slots + "{}\n".format(store['store']['name'])
         slots = slots + "{}, {}, {}, {}\n".format(
@@ -88,24 +125,9 @@ def get_all_slots(stores_available):
             store['store']['city'].title(),
             store['store']['state'],
             store['store']['postalCode'])
+        slots = slots + "Curbside product markup: {}%\n".format(get_markup(store_id))
 
-        url = 'https://www.heb.com/commerce-api/v1/timeslot/timeslots?store_id={}&days=15&fulfillment_type=pickup'.format(store['store']['id'])
-        headers = {
-            "Host": "www.heb.com"
-        }
-        response = requests.get(url, headers=headers)
-
-        json_blob = json.loads(response.content)
-        slots_blob = None
-
-        if 'items' in json_blob:
-            slots_blob = json_blob['items']
-            slots = slots + "Available Curbside slots:\n"
-            for slot_number,slot in enumerate(slots_blob):
-                slot_time = parse(slot['timeslot']['startTime'])
-                slots = slots + "{} for ${:,.2f}\n".format(slot_time.strftime("%B %d @ %I:%M %p"), slot['timeslot']['totalPrice'])
-        else:
-            slots_available = None
+        slots = slots + get_detail_slots(store_id)
 
     return slots
 
