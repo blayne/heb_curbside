@@ -18,6 +18,10 @@ parser.add_argument(
     help="The radius to search (in miles)",
     required=True)
 parser.add_argument(
+    "--detail",
+    help="Show all available Curbside slots and their prices",
+    action='store_true')
+parser.add_argument(
     "--daemon",
     help="Check Curbside availability every interval",
     action='store_true')
@@ -73,7 +77,39 @@ def find_stores():
 
     return stores_available
 
-def get_slots(stores_available):
+def get_all_slots(stores_available):
+    slots = ""
+    slots = slots + "Stores with available Curbside (as of {}):\n".format(get_now())
+    for store in stores_available:
+        slots = slots + "\n"
+        slots = slots + "{}\n".format(store['store']['name'])
+        slots = slots + "{}, {}, {}, {}\n".format(
+            store['store']['address1'].title(),
+            store['store']['city'].title(),
+            store['store']['state'],
+            store['store']['postalCode'])
+
+        url = 'https://www.heb.com/commerce-api/v1/timeslot/timeslots?store_id={}&days=15&fulfillment_type=pickup'.format(store['store']['id'])
+        headers = {
+            "Host": "www.heb.com"
+        }
+        response = requests.get(url, headers=headers)
+
+        json_blob = json.loads(response.content)
+        slots_blob = None
+
+        if 'items' in json_blob:
+            slots_blob = json_blob['items']
+            slots = slots + "Available Curbside slots:\n"
+            for slot_number,slot in enumerate(slots_blob):
+                slot_time = parse(slot['timeslot']['startTime'])
+                slots = slots + "{} for ${:,.2f}\n".format(slot_time.strftime("%B %d @ %I:%M %p"), slot['timeslot']['totalPrice'])
+        else:
+            slots_available = None
+
+    return slots
+
+def get_next_slots(stores_available):
     slots = ""
     slots = slots + "Stores with available Curbside (as of {}):\n".format(get_now())
     for store in stores_available:
@@ -87,6 +123,7 @@ def get_slots(stores_available):
         available_time = parse(
             store['storeNextAvailableTimeslot']['nextAvailableTimeslotDate'])
         slots = slots + "Next available slot: {}\n".format(available_time.strftime("%B %d @ %I:%M %p"))
+
     return slots
 
 def speak():
@@ -111,7 +148,10 @@ if args.daemon:
     while True:
         stores_available = find_stores()
         if stores_available:
-            slots = get_slots(stores_available)
+            if args.detail:
+                slots = get_all_slots(stores_available)
+            else:
+                slots = get_next_slots(stores_available)
             print(slots)
             if args.speak: speak()
             if args.email_to: send_email(slots)
@@ -122,8 +162,12 @@ if args.daemon:
 else:
     stores_available = find_stores()
     if stores_available:
-        slots = get_slots(stores_available)
+        if args.detail:
+            slots = get_all_slots(stores_available)
+        else:
+            slots = get_next_slots(stores_available)
         print(slots)
+        get_all_slots(stores_available)
         if args.speak: speak()
         if args.email_to: send_email(slots)
     else:
