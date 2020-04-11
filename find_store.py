@@ -19,7 +19,7 @@ parser.add_argument(
     required=True)
 parser.add_argument(
     "--daemon",
-    help="Check curbside availability every interval",
+    help="Check Curbside availability every interval",
     action='store_true')
 parser.add_argument(
     "--interval",
@@ -49,7 +49,7 @@ def get_now():
     return datetime.now().strftime("%B %d @ %I:%M:%S %p")
 
 def print_no_slots():
-    print("{} - There are no curbside slots available.".format(get_now()))
+    print("{} - There are no Curbside slots available.".format(get_now()))
 
 def find_stores():
     url = 'https://www.heb.com/commerce-api/v1/store/locator/address'
@@ -75,7 +75,7 @@ def find_stores():
 
 def get_slots(stores_available):
     slots = ""
-    slots = slots + "Stores with available curbside (as of {}):\n".format(get_now())
+    slots = slots + "Stores with available Curbside (as of {}):\n".format(get_now())
     for store in stores_available:
         slots = slots + "\n"
         slots = slots + "{}\n".format(store['store']['name'])

@@ -26,7 +26,7 @@ optional arguments:
   -h, --help           show this help message and exit
   --zip ZIP            Your zip code
   --radius RADIUS      The radius for your search (in miles)
-  --daemon             Check curbside availability every 15 minutes
+  --daemon             Check Curbside availability every 15 minutes
   --interval INTERVAL  Interval at which the daemon should check availability
                        (default 5 mins)
   --speak              Speak when a slot is found
@@ -47,12 +47,12 @@ https://www.digitaltrends.com/mobile/how-to-send-a-text-from-your-email-account/
 
 ## When there are no slots available, you should see:
 ```
-There are no curbside slots available.
+April 11 @ 11:11:41 AM - There are no Curbside slots available.
 ```
 
 ## When there are slots available, you should see:
 ```
-Stores with available curbside:
+Stores with available Curbside (as of April 11 @ 11:13:22 AM):
 
 Hancock Center H-E-B
 1000 East 41 St., Austin, TX, 78751-4810
