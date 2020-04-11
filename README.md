@@ -79,6 +79,7 @@ Stores with available Curbside (as of April 11 @ 06:22:20 PM):
 
 Riverside H-E-B plus!
 2508 East Riverside Drive, Austin, TX, 78741-3037
+Curbside product markup: 3%
 Available Curbside slots:
 April 18 @ 03:00 PM for $0.00
 April 18 @ 04:30 PM for $0.00
