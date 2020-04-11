@@ -90,16 +90,22 @@ def get_slots(stores_available):
     return slots
 
 def speak():
-    mac_say.say("Curbside slot found")
+    try:
+        mac_say.say("Curbside slot found")
+    except Exception as e:
+        print(e)
 
 def send_email(slots):
     context = ssl.create_default_context()
 
     email_body = "Subject: H-E-B Curbside slots found!\n\n{}".format(slots)
 
-    with smtplib.SMTP_SSL("smtp.gmail.com", SMTP_PORT, context=context) as server:
-        server.login(args.username, email_password)
-        server.sendmail(args.username, args.email_to, email_body)
+    try:
+        with smtplib.SMTP_SSL("smtp.gmail.com", SMTP_PORT, context=context) as server:
+            server.login(args.username, email_password)
+            server.sendmail(args.username, args.email_to, email_body)
+    except Exception as e:
+        print(e)
 
 if args.daemon:
     while True:
