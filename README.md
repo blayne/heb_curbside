@@ -30,3 +30,15 @@ Mueller H-E-B
 Available slot: April 18 @ 09:30 PM
 
 ```
+
+## Help
+```
+# ~/Downloads/./find_store --help
+
+usage: find_store [-h] --zip ZIP --radius RADIUS
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --zip ZIP        Your zip code
+  --radius RADIUS  The radius for your search (in miles)
+```
