@@ -31,6 +31,12 @@ Available slot: April 18 @ 09:30 PM
 
 ```
 
+## Docker Usage
+```
+$ docker build -t heb-curbside .
+$ docker run heb-curbside --zip ZIP --radius RADIUS
+```
+
 ## Help
 ```
 # ~/Downloads/./find_store --help
