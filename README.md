@@ -12,23 +12,32 @@ https://github.com/blayne/heb_curbside/raw/master/find_store
 `~/Downloads/./find_store --zip 78701 --radius 25`
 
 **With all of the options:**  
-`~/Downloads/./find_store --zip 78701 --radius 25 --daemon --interval 5 --speak --email-to blayne@blaynedreier.com --username blayne.dreier@gmail.com`
+`~/Downloads/./find_store --zip 78701 --radius 25 --detail --daemon --interval 5 --speak --email-to blayne@blaynedreier.com --username blayne.dreier@gmail.com`
+
+**find_store.py**
+
+The `find_store` binary was compiled on MacOS from `find_store.py` with `pyinstaller`. You can alternatively run `find_store.py` directly by using following commands.
+```
+pip install -r requirements.txt
+python3 find_store.py --zip 78701 --radius 25
+```
 
 ## Help
 ```
 # ~/Downloads/./find_store --help
 
-usage: find_store.py [-h] --zip ZIP --radius RADIUS [--daemon]
+usage: find_store.py [-h] --zip ZIP --radius RADIUS [--detail] [--daemon]
                      [--interval INTERVAL] [--speak] [--email-to EMAIL_TO]
                      [--username USERNAME]
 
 optional arguments:
   -h, --help           show this help message and exit
   --zip ZIP            Your zip code
-  --radius RADIUS      The radius for your search (in miles)
-  --daemon             Check Curbside availability every 15 minutes
+  --radius RADIUS      The radius to search (in miles)
+  --detail             Show all available Curbside slots and their prices
+  --daemon             Check Curbside availability every interval
   --interval INTERVAL  Interval at which the daemon should check availability
-                       (default 5 mins)
+                       (in minutes, default=5)
   --speak              Speak when a slot is found
   --email-to EMAIL_TO  The address to email when slots are found
   --username USERNAME  Your Gmail username
@@ -62,6 +71,21 @@ Mueller H-E-B
 1801 E.51St Street, Austin, TX, 78723-3014
 Available slot: April 18 @ 09:30 PM
 
+```
+
+**With `--detail`**:
+```
+Stores with available Curbside (as of April 11 @ 06:22:20 PM):
+
+Riverside H-E-B plus!
+2508 East Riverside Drive, Austin, TX, 78741-3037
+Available Curbside slots:
+April 18 @ 03:00 PM for $0.00
+April 18 @ 04:30 PM for $0.00
+April 18 @ 06:00 PM for $0.00
+April 18 @ 06:30 PM for $0.00
+April 18 @ 07:00 PM for $0.00
+April 18 @ 07:30 PM for $0.00
 ```
 
 ## Docker Usage
