@@ -26,21 +26,23 @@ python3 find_store.py --zip 78701 --radius 25
 ```
 # ~/Downloads/./find_store --help
 
-usage: find_store.py [-h] --zip ZIP --radius RADIUS [--detail] [--daemon]
-                     [--interval INTERVAL] [--speak] [--email-to EMAIL_TO]
-                     [--username USERNAME]
+usage: find_store.py [-h] [--zip ZIP] [--store-id STORE_ID] [--radius RADIUS]
+                     [--detail] [--daemon] [--interval INTERVAL] [--speak]
+                     [--email-to EMAIL_TO] [--email-username EMAIL_USERNAME]
 
 optional arguments:
-  -h, --help           show this help message and exit
-  --zip ZIP            Your zip code
-  --radius RADIUS      The radius to search (in miles)
-  --detail             Show all available Curbside slots and their prices
-  --daemon             Check Curbside availability every interval
-  --interval INTERVAL  Interval at which the daemon should check availability
-                       (in minutes, default=5)
-  --speak              Speak when a slot is found
-  --email-to EMAIL_TO  The address to email when slots are found
-  --username USERNAME  Your Gmail username
+  -h, --help            show this help message and exit
+  --zip ZIP             Your zip code
+  --store-id STORE_ID   Check Curbside slots at a single store
+  --radius RADIUS       The radius to search (in miles, default=25)
+  --detail              Show all available Curbside slots and their prices
+  --daemon              Check Curbside availability every interval
+  --interval INTERVAL   Interval at which the daemon should check availability
+                        (in minutes, default=5)
+  --speak               Speak when a slot is found
+  --email-to EMAIL_TO   The address to email when slots are found
+  --email-username EMAIL_USERNAME
+                        Your Gmail username
 ```
 
 ## Gmail Authentication
