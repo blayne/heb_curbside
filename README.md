@@ -12,7 +12,7 @@ https://github.com/blayne/heb_curbside/raw/master/find_store
 `~/Downloads/./find_store --zip 78701 --radius 25`
 
 **With all of the options:**  
-`~/Downloads/./find_store --zip 78701 --radius 25 --detail --daemon --interval 5 --speak --email-to blayne@blaynedreier.com --username blayne.dreier@gmail.com`
+`~/Downloads/./find_store --zip 78701 --radius 25 --detail --slots-only --daemon --interval 5 --speak --email-to blayne@blaynedreier.com --username blayne.dreier@gmail.com`
 
 **find_store.py**
 
@@ -27,8 +27,9 @@ python3 find_store.py --zip 78701 --radius 25
 # ~/Downloads/./find_store --help
 
 usage: find_store.py [-h] [--zip ZIP] [--store-id STORE_ID] [--radius RADIUS]
-                     [--detail] [--daemon] [--interval INTERVAL] [--speak]
-                     [--email-to EMAIL_TO] [--email-username EMAIL_USERNAME]
+                     [--detail] [--daemon] [--slots-only]
+                     [--interval INTERVAL] [--speak] [--email-to EMAIL_TO]
+                     [--email-username EMAIL_USERNAME]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -37,6 +38,7 @@ optional arguments:
   --radius RADIUS       The radius to search (in miles, default=25)
   --detail              Show all available Curbside slots and their prices
   --daemon              Check Curbside availability every interval
+  --slots-only          Only show stores with Curbside slots
   --interval INTERVAL   Interval at which the daemon should check availability
                         (in minutes, default=5)
   --speak               Speak when a slot is found
