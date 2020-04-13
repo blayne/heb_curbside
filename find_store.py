@@ -47,10 +47,6 @@ class HEB:
                 curbside_store.city = store['store']['city'].title()
                 curbside_store.state = store['store']['state']
                 curbside_store.zip = store['store']['postalCode']
-                if len(store['storeNextAvailableTimeslot']['nextAvailableTimeslotDate']) > 0:
-                    time_slot = Timeslot(store['storeNextAvailableTimeslot']['nextAvailableTimeslotDate'])
-                    curbside_store.timeslots.append(time_slot)
-
                 if search.detail:
                     url = 'https://www.heb.com/commerce-api/v1/cart/fulfillment/pickup'
                     payload = '{"ignoreCartChangeWarnings":false,"pickupStoreId":"'+ curbside_store.id +'"}'
@@ -75,6 +71,10 @@ class HEB:
                     for timeslot in timeslots:
                         time_slot = Timeslot(timeslot['timeslot']['startTime'])
                         time_slot.price = timeslot['timeslot']['totalPrice']
+                        curbside_store.timeslots.append(time_slot)
+                else:
+                    if len(store['storeNextAvailableTimeslot']['nextAvailableTimeslotDate']) > 0:
+                        time_slot = Timeslot(store['storeNextAvailableTimeslot']['nextAvailableTimeslotDate'])
                         curbside_store.timeslots.append(time_slot)
 
                 self.curbside_stores.append(curbside_store)
@@ -244,6 +244,8 @@ class Search:
             email_body = "Subject: H-E-B Curbside slots found!\n\n"
             email_body = email_body + "Stores with available Curbside (as of {}):\n\n".format(get_now())
             for curbside_store in self.heb.curbside_stores:
+                if self.slots_only and len(curbside_store.timeslots) < 1:
+                    continue
                 email_body = email_body + curbside_store.get_header_text()
                 markup_text = curbside_store.get_markup_text()
                 if markup_text:
@@ -421,6 +423,11 @@ if __name__ == '__main__':
         help="Check Curbside availability every interval",
         action='store_true')
     parser.add_argument(
+        "--slots-only",
+        help="Only show stores with Curbside slots",
+        action='store_true',
+        default=False)
+    parser.add_argument(
         "--interval",
         type=int,
         help="Interval at which the daemon should check availability (in minutes, default=5)",
@@ -451,6 +458,7 @@ if __name__ == '__main__':
     search.store_id = args.store_id if args.store_id else None
     search.detail = args.detail if args.detail else False
     search.daemon = args.daemon if args.daemon else False
+    search.slots_only = args.slots_only if args.slots_only else False
     search.interval = args.interval * 60 if args.interval else 300
     search.speak = args.speak if args.speak else False
     search.email_to = args.email_to if args.email_to else None
@@ -466,6 +474,8 @@ if __name__ == '__main__':
     while first_run or search.daemon:
         print("Stores with available Curbside (as of {}):\n".format(get_now()))
         for curbside_store in search.heb.curbside_stores:
+            if search.slots_only and len(curbside_store.timeslots) < 1:
+                continue
             output = curbside_store.get_header_text()
             markup_text = curbside_store.get_markup_text()
             if markup_text:
