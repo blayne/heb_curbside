@@ -1,13 +1,29 @@
-import requests
-import json
+#!/usr/bin/env python3
+
+from sys import exit
 from time import sleep
-import argparse
-import mac_say
-import smtplib, ssl
-from getpass import getpass
 from dateutil.parser import parse
 from datetime import datetime
-from sys import exit
+from getpass import getpass
+import argparse
+import json
+import smtplib, ssl
+import requests
+import mac_say
+
+__author__ = "Blayne Dreier"
+__copyright__ = "Copyright 2020"
+__credits__ = ["Blayne Dreier", "Alex Ionescu"]
+__license__ = "GPL"
+__version__ = "2.0"
+__maintainer__ = "Blayne Dreier"
+__email__ = "blayne@blaynedreier.com"
+__status__ = "Production"
+
+"""
+Example:
+    python find_store.py --zip 78701 --radius 25
+"""
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 465
