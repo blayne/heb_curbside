@@ -1,5 +1,7 @@
 # H-E-B Curbside availability finder
 
+## Running the program on MacOS
+
 1. Download the program from this URL:  
 https://github.com/blayne/heb_curbside/raw/master/find_store
 
@@ -11,14 +13,14 @@ https://github.com/blayne/heb_curbside/raw/master/find_store
 4. Run find_store:  
 `~/Downloads/./find_store --zip 78701 --radius 25`
 
-**With all of the options:**  
-`~/Downloads/./find_store --zip 78701 --radius 25 --detail --slots-only --daemon --interval 5 --speak --email-to blayne@blaynedreier.com --username blayne.dreier@gmail.com`
+**Show all of the available options:**  
+`~/Downloads/./find_store --help`
 
-**find_store.py**
+## Running the Python script
 
-The `find_store` binary was compiled on MacOS from `find_store.py` with `pyinstaller`. You can alternatively run `find_store.py` directly by using following commands.
+The `find_store` binary above was compiled on MacOS from `find_store.py` with `pyinstaller`. You can alternatively run `find_store.py` directly by using following commands.
 ```
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 python3 find_store.py --zip 78701 --radius 25
 ```
 
