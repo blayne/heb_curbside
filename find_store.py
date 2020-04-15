@@ -44,6 +44,7 @@ class HEB:
         self.__curbside_stores = curbside_stores
 
     def get_curbside_stores(self, search):
+        self.curbside_stores.clear()
         if search.zip:
             url = 'https://www.heb.com/commerce-api/v1/store/locator/address'
             headers = {
@@ -256,24 +257,25 @@ class Search:
 
     def send_email(self):
         if self.email_to:
-            context = ssl.create_default_context()
-            email_body = "Subject: H-E-B Curbside slots found!\n\n"
-            email_body = email_body + "Stores with available Curbside (as of {}):\n\n".format(get_now())
-            for curbside_store in self.heb.curbside_stores:
-                if self.slots_only and len(curbside_store.timeslots) < 1:
-                    continue
-                email_body = email_body + curbside_store.get_header_text()
-                markup_text = curbside_store.get_markup_text()
-                if markup_text:
-                    email_body = email_body + markup_text
-                email_body = email_body + curbside_store.get_timeslots_text()
-                email_body = email_body + "\n"
-            try:
-                with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
-                    server.login(self.email_username, self.email_password)
-                    server.sendmail(self.email_username, self.email_to, email_body)
-            except Exception as e:
-                print(e)
+            if self.num_curbside_slots > 0:
+                context = ssl.create_default_context()
+                email_body = "Subject: H-E-B Curbside slots found!\n\n"
+                email_body = email_body + "Stores with available Curbside (as of {}):\n\n".format(get_now())
+                for curbside_store in self.heb.curbside_stores:
+                    if self.slots_only and len(curbside_store.timeslots) < 1:
+                        continue
+                    email_body = email_body + curbside_store.get_header_text()
+                    markup_text = curbside_store.get_markup_text()
+                    if markup_text:
+                        email_body = email_body + markup_text
+                    email_body = email_body + curbside_store.get_timeslots_text()
+                    email_body = email_body + "\n"
+                try:
+                    with smtplib.SMTP_SSL(SMTP_SERVER, SMTP_PORT, context=context) as server:
+                        server.login(self.email_username, self.email_password)
+                        server.sendmail(self.email_username, self.email_to, email_body)
+                except Exception as e:
+                    print(e)
 
 
 class Store:
@@ -484,10 +486,9 @@ if __name__ == '__main__':
     if not search.daemon:
         search.interval = 0
 
-    search.heb.get_curbside_stores(search)
-
     first_run = True
     while first_run or search.daemon:
+        search.heb.get_curbside_stores(search)
         print("Stores with available Curbside (as of {}):\n".format(get_now()))
         for curbside_store in search.heb.curbside_stores:
             if search.slots_only and len(curbside_store.timeslots) < 1:
