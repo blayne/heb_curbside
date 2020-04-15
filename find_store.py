@@ -44,6 +44,7 @@ class HEB:
         self.__curbside_stores = curbside_stores
 
     def get_curbside_stores(self, search):
+        self.curbside_stores.clear()
         if search.zip:
             url = 'https://www.heb.com/commerce-api/v1/store/locator/address'
             headers = {
@@ -485,10 +486,9 @@ if __name__ == '__main__':
     if not search.daemon:
         search.interval = 0
 
-    search.heb.get_curbside_stores(search)
-
     first_run = True
     while first_run or search.daemon:
+        search.heb.get_curbside_stores(search)
         print("Stores with available Curbside (as of {}):\n".format(get_now()))
         for curbside_store in search.heb.curbside_stores:
             if search.slots_only and len(curbside_store.timeslots) < 1:
