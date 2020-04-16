@@ -424,8 +424,11 @@ class Timeslot:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument("--zip", help="Your zip code")
-    parser.add_argument(
+    selection_group = parser.add_mutually_exclusive_group(required = True)
+    selection_group.add_argument(
+        "--zip",
+        help="Your zip code")
+    selection_group.add_argument(
         "--store-id",
         help="Monitor Curbside slots at a single store")
     parser.add_argument(
@@ -435,8 +438,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "--detail",
         help="Show all available Curbside slots and their prices",
-        action='store_true',
-        default=False)
+        action='store_true')
     parser.add_argument(
         "--daemon",
         help="Check Curbside availability every interval",
@@ -444,8 +446,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "--slots-only",
         help="Only show stores with Curbside slots",
-        action='store_true',
-        default=False)
+        action='store_true')
     parser.add_argument(
         "--interval",
         type=int,
@@ -471,22 +472,18 @@ if __name__ == '__main__':
     if args.email_to and (args.email_username is None):
         parser.error("--email-to requires --email-username")
         exit(1)
-    if (args.store_id is None and args.zip is None) or (not args.store_id is None and not args.zip is None):
-        parser.print_help()
-        print("\nError: Either --store_id or --zip (but not both) must be supplied.")
-        exit(1)
 
     search = Search()
-    search.zip = args.zip if args.zip else None
-    search.radius = args.radius if args.radius else 25
-    search.store_id = args.store_id if args.store_id else None
-    search.detail = args.detail if args.detail else False
-    search.daemon = args.daemon if args.daemon else False
-    search.slots_only = args.slots_only if args.slots_only else False
-    search.interval = args.interval * 60 if args.interval else 300
-    search.speak = args.speak if args.speak else False
-    search.email_to = args.email_to if args.email_to else None
-    search.email_username = args.email_username if args.email_username else None
+    search.zip = args.zip
+    search.radius = args.radius
+    search.store_id = args.store_id
+    search.detail = args.detail
+    search.daemon = args.daemon
+    search.slots_only = args.slots_only
+    search.interval = args.interval * 60
+    search.speak = args.speak
+    search.email_to = args.email_to
+    search.email_username = args.email_username
     if search.email_to:
         search.email_password = getpass(prompt="Password for {}:".format(search.email_username))
     if not search.daemon:
