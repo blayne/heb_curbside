@@ -10,6 +10,7 @@ import json
 import smtplib, ssl
 import requests
 import mac_say
+import os
 
 __author__ = "Blayne Dreier"
 __copyright__ = "Copyright 2020"
@@ -460,6 +461,11 @@ if __name__ == '__main__':
     parser.add_argument(
         "--email-username",
         help="Your Gmail username")
+    parser.add_argument(
+        "--clear-console",
+        help="Clear the console before printing results, useful for dashboard display in daemon mode",
+        action='store_true',
+        default=False)
     args = parser.parse_args()
 
     if args.email_to and (args.email_username is None):
@@ -488,6 +494,8 @@ if __name__ == '__main__':
 
     first_run = True
     while first_run or search.daemon:
+        if args.clear_console:
+            os.system('cls' if os.name == 'nt' else 'clear')
         search.heb.get_curbside_stores(search)
         print("Stores with available Curbside (as of {}):\n".format(get_now()))
         for curbside_store in search.heb.curbside_stores:
