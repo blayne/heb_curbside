@@ -1,3 +1,3 @@
 python-dateutil
 requests
-mac-say
+mac-say; sys_platform == 'darwin'
