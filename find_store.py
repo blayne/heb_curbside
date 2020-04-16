@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from sys import exit
+from sys import exit, platform
 from time import sleep
 from dateutil.parser import parse
 from datetime import datetime
@@ -9,7 +9,6 @@ import argparse
 import json
 import smtplib, ssl
 import requests
-import mac_say
 import os
 
 __author__ = "Blayne Dreier"
@@ -237,7 +236,8 @@ class Search:
         print("email_username: " + str(self.email_username))
 
     def speak_num_curbside_slots(self):
-        if self.speak:
+        if self.speak and platform == 'darwin':
+            import mac_say
             if self.num_curbside_slots > 0:
                 if self.detail or self.store_id:
                     try:
@@ -453,7 +453,7 @@ if __name__ == '__main__':
         default=5)
     parser.add_argument(
         "--speak",
-        help="Speak when a slot is found",
+        help="Speak when a slot is found.  Ignored if not macOS.",
         action='store_true')
     parser.add_argument(
         "--email-to",

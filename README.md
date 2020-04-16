@@ -43,7 +43,7 @@ optional arguments:
   --slots-only          Only show stores with Curbside slots
   --interval INTERVAL   Interval at which the daemon should check availability
                         (in minutes, default=5)
-  --speak               Speak when a slot is found
+  --speak               Speak when a slot is found.  Ignored if not macOS.
   --email-to EMAIL_TO   The address to email when slots are found
   --email-username EMAIL_USERNAME
                         Your Gmail username
