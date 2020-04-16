@@ -47,6 +47,8 @@ optional arguments:
   --email-to EMAIL_TO   The address to email when slots are found
   --email-username EMAIL_USERNAME
                         Your Gmail username
+  --clear-console       Clear the console before printing results, useful for
+                        dashboard display in daemon mode  
 ```
 
 ## Gmail Authentication
