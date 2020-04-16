@@ -9,7 +9,6 @@ import argparse
 import json
 import smtplib, ssl
 import requests
-import mac_say
 
 __author__ = "Blayne Dreier"
 __copyright__ = "Copyright 2020"
@@ -237,6 +236,7 @@ class Search:
 
     def speak_num_curbside_slots(self):
         if self.speak:
+            import mac_say
             if self.num_curbside_slots > 0:
                 if self.detail or self.store_id:
                     try:
