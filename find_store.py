@@ -9,7 +9,6 @@ import argparse
 import json
 import smtplib, ssl
 import requests
-import mac_say
 import os
 
 __author__ = "Blayne Dreier"
